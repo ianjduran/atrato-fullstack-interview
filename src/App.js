@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import AddUserCard from './components/AddUserCard/AddUserCard';
+import Card from './components/Card/Card';
+import React from 'react';
 
 function App() {
+  const [users, setUsers] = React.useState(null);
+
+  React.useEffect(()=>{
+    fetch(`http://127.0.0.1:5000/api/users`)
+    .then(res => res.json())
+    .then(data=>setUsers(data))
+  },[])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='p-4'>
+        <h1 className='font-bold w-full text-4xl mb-6'>Dashboard</h1>
+        <div className='flex flex-col gap-4 w-full'>
+        {users && users.map((currentUser)=> {
+          return <Card data={currentUser} key={currentUser.id} className=''></Card>
+        }
+        )}
+
+        </div>
+
+        <AddUserCard/>
     </div>
   );
 }
